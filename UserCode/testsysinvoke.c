@@ -1,30 +1,32 @@
-//Kyle Mikolajczyk
-//kjmikolajczyk@wpi.edu
+// #include <sys/types.h>
+// #include <sys/stat.h>
+// #include <fcntl.h>
+//
+// /*arguments of syscall can be found on http://blog.rchapman.org/post/36801038863/linux-system-call-table-for-x86-64*/
+// int main(int argc, char* argv[])
+// {
+//   open("Zoinks.txt", 0);
+// }
+// open system call
+#include<stdio.h>
+#include<fcntl.h>
+#include<errno.h>
+extern int errno;
+int main()
+{
+    // if file does not have in directory
+    // then file foo.txt is created.
+    int fd = open("Zoinks.txt", O_RDONLY | O_CREAT);
 
-#include <sys/syscall.h>
-#include <stdio.h>
-#include <unistd.h>
+    printf("fd = %d/n", fd);
 
-// These values MUST match the unistd_32.h modifications:
-#define __NR_cs3013_syscall1 385
-#define __NR_cs3013_syscall2 386
-#define __NR_cs3013_syscall3 387
-long testCall1 ( void) {
-	return (long) syscall(__NR_cs3013_syscall1);
-}
+    if (fd ==-1)
+    {
+        // print which type of error have in a code
+        printf("Error Number % d\n", errno);
 
-long testCall2 ( void) {
-	return (long) syscall(__NR_cs3013_syscall2);
-}
-
-long testCall3 ( void) {
-	return (long) syscall(__NR_cs3013_syscall3);
-}
-
-int main () {
-	printf("The return values of the system calls are:\n");
-	printf("\tcs3013_syscall1: %ld\n", testCall1());
-	printf("\tcs3013_syscall2: %ld\n", testCall2());
-	printf("\tcs3013_syscall3: %ld\n", testCall3());
-	return 0;
+        // print program detail "Success or failure"
+        perror("Program");
+    }
+    return 0;
 }
