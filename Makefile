@@ -1,4 +1,3 @@
-CONFIG_MODULE_SIG=n
 obj-m := virusscanner.o
 KDIR := /lib/modules/$(shell uname -r)/build
 PWD := $(shell pwd)
