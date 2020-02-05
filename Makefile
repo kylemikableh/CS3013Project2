@@ -1,4 +1,4 @@
-obj-m := virusscanner.o
+obj-m := virusscanner2.o
 KDIR := /lib/modules/$(shell uname -r)/build
 PWD := $(shell pwd)
 
