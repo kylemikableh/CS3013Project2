@@ -34,13 +34,13 @@ asmlinkage long new_sys_close(int desc) {
 
 asmlinkage long new_sys_read(int desc, void *buf, size_t count) {
 	if(current_uid().val < 1000 || !desc) {
-		return desc;
+		return ref_sys_read(desc, buf, count);
 	}
 	else{
 		if(strstr((char *) buf, "zoinks!")) {
-			printk("User %d read from file descriptor %d, but that read contained malicious!\n", 				current_uid().val, desc);
+			printk(KERN_INFO "User %d read from file descriptor %d, but that read contained malicious!\n", 				current_uid().val, desc);
 		}
-	return desc;
+	return ref_sys_read(desc, buf, count);
 	}
 }
 
