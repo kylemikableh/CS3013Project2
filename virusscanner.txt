@@ -1,0 +1,41 @@
+
+[ 2244.331948] User 1000 is opening file: /home/cshue/Desktop/p2/CS3013Project2/Zoinks.txt
+[ 2244.331954] User 1000 is closing file descriptor: 3
+[ 2244.331956] User 1000 is closing file descriptor: 3
+[ 2245.817403] User 1000 read from file descriptor 14, but that read contained malicious!
+[ 2245.817412] User 1000 read from file descriptor 14, but that read contained malicious!
+[ 2245.818013] User 1000 read from file descriptor 14, but that read contained malicious!
+[ 2245.818018] User 1000 read from file descriptor 14, but that read contained malicious!
+[ 2245.828297] User 1000 read from file descriptor 14, but that read contained malicious!
+[ 2246.544529] User 1000 read from file descriptor 14, but that read contained malicious!
+[ 2246.544544] User 1000 read from file descriptor 14, but that read contained malicious!
+[ 2246.555502] User 1000 read from file descriptor 14, but that read contained malicious!
+[ 2246.685307] User 1000 read from file descriptor 14, but that read contained malicious!
+[ 2246.685315] User 1000 read from file descriptor 14, but that read contained malicious!
+[ 2246.696071] User 1000 read from file descriptor 14, but that read contained malicious!
+[ 2247.469256] User 1000 is closing file descriptor: 3
+[ 2247.469321] User 1000 is closing file descriptor: 4
+[ 2247.469438] User 1000 is closing file descriptor: 4
+[ 2247.469445] User 1000 is closing file descriptor: 3
+[ 2247.469840] User 1000 is opening file: /etc/ld.so.cache
+[ 2247.469851] User 1000 is closing file descriptor: 3
+[ 2247.469864] User 1000 is opening file: /lib/i386-linux-gnu/libtinfo.so.5
+[ 2247.469886] User 1000 is closing file descriptor: 3
+[ 2247.469894] User 1000 is opening file: /lib/i386-linux-gnu/librt.so.1
+[ 2247.469916] User 1000 is closing file descriptor: 3
+[ 2247.469926] User 1000 is opening file: /lib/i386-linux-gnu/libc.so.6
+[ 2247.469956] User 1000 is closing file descriptor: 3
+[ 2247.469969] User 1000 is opening file: /lib/i386-linux-gnu/libpthread.so.0
+[ 2247.469994] User 1000 is closing file descriptor: 3
+[ 2247.470231] User 1000 is opening file: /usr/lib/locale/locale-archive
+[ 2247.470249] User 1000 is closing file descriptor: 3
+[ 2247.470339] User 1000 is opening file: /lib/terminfo/x/xterm-256color
+[ 2247.470368] User 1000 is closing file descriptor: 3
+[ 2247.470394] User 1000 is opening file: /home/cshue/.config/terminal-colors.d
+[ 2247.470399] User 1000 is opening file: /etc/terminal-colors.d
+[ 2247.470402] User 1000 is opening file: /dev/kmsg
+[ 2247.470422] User 1000 is opening file: /usr/lib/i386-linux-gnu/gconv/gconv-modules.cache
+[ 2247.470428] User 1000 is closing file descriptor: 4
+[ 2247.476126] User 1000 read from file descriptor 14, but that read contained malicious!
+[ 2247.519940] User 1000 is opening file: /tmp
+
