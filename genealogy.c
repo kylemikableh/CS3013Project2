@@ -4,13 +4,13 @@
 #include <linux/sched.h>
 #include <linux/list.h>
 #include <asm/current.h>
-#include <asm-generic/uaccess.h>
+#include <asm/uaccess.h>
 
 unsigned long **sys_call_table;
 
 asmlinkage long (*ref_sys_cs3013_syscall2)(void);
 
-typedef struct task_struct task_struct;
+// typedef struct task_struct task_struct;
 
 
 struct ancestry {
@@ -20,20 +20,24 @@ pid_t children[100];
 };
 
 
-void ancestor_search(task_struct* parent_ptr, pid_t* ancestor_ptr) {
-  pid_t tmp_pid = parent->pid;
-  *ances_ptr++ = parent_ptr->pid;
-  printk(KERN_INFO "Parent: %d\n", parent->pid);
-  find_ancestors(parent->p_opptr, ances_ptr);
-
+void ancestor_search(struct task_struct* parent_ptr, pid_t* ancestor_ptr) {
+  pid_t tmp_pid = parent_ptr->pid;
+  *ancestor_ptr++ = parent_ptr->pid;
+  printk(KERN_INFO "Parent: %d\n", parent_ptr->pid);
+  ancestor_search(parent_ptr->p_pptr, ancestor_ptr);
+  if(parent_ptr == 0)
+  {
+    printk(KERN_INFO "Parent FOUNDDDD!: %d\n", parent_ptr->pid);
+    return;
+  }
 }
 
 asmlinkage long new_sys_cs3013_syscall2(unsigned short *target_pid, struct ancestry *response) {
 
 	//set pointers
 	unsigned short target_pid_copy;
-	ancestry response_copy;
-	ancestry* response_copy_ptr = &response_copy;
+	struct ancestry response_copy;
+	struct ancestry* response_copy_ptr = &response_copy;
 
 
 	//check validity
@@ -53,12 +57,12 @@ asmlinkage long new_sys_cs3013_syscall2(unsigned short *target_pid, struct ances
 
 	//get siblings and children
 	//switch to correct process here!!! but how???? cuz idk
-	task_struct* current = get_current();
-	task_struct* young_sibling = current->p_cptr;
-	task_struct* old_sibling = current->p_osptr;
-	task_struct* child = current->p_pptr;
+	struct task_struct* current = get_current();
+	struct task_struct* young_sibling = current->p_cptr;
+	struct task_struct* old_sibling = current->p_osptr;
+	struct task_struct* child = current->p_pptr;
 
-	task_struct* pos;
+	struct task_struct* pos;
 
 
 	//list children
@@ -103,7 +107,7 @@ static unsigned long **find_sys_call_table(void) {
     sct = (unsigned long **)offset;
 
     if (sct[__NR_close] == (unsigned long *) sys_close) {
-      printk(KERN_INFO "Virus Scanner: Found syscall table at address: 0x%02lX",
+      printk(KERN_INFO "Genealogy: Found syscall table at address: 0x%02lX",
 	     (unsigned long) sct);
       return sct;
     }
@@ -164,7 +168,7 @@ static int __init interceptor_start(void) {
 
 
   /* And indicate the load was successful */
-  printk(KERN_INFO "Loaded Virus Scanner!");
+  printk(KERN_INFO "Loaded Genealogy!");
 
   return 0;
 }
@@ -179,7 +183,7 @@ static void __exit interceptor_end(void) {
   sys_call_table[__NR_cs3013_syscall2] = (unsigned long *)ref_sys_cs3013_syscall2;
   enable_page_protection();
 
-  printk(KERN_INFO "Unloaded Virus Scanner!!");
+  printk(KERN_INFO "Unloaded Genealogy!!");
 }
 
 MODULE_LICENSE("GPL");
