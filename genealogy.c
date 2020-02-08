@@ -20,7 +20,11 @@ pid_t children[100];
 };
 
 
-void ancestor_search() {
+void ancestor_search(task_struct* parent_ptr, pid_t* ancestor_ptr) {
+  pid_t tmp_pid = parent->pid;
+  *ances_ptr++ = parent_ptr->pid;
+  printk(KERN_INFO "Parent: %d\n", parent->pid);
+  find_ancestors(parent->p_opptr, ances_ptr);
 
 }
 
@@ -32,8 +36,7 @@ ancestry response_copy;
 ancestry* response_copy_ptr = &response_copy;
 
 
-
-//check validity with copy_from_user
+//check validity
 if (copy_from_user(&target_pid_copy, target_pid, sizeof(unsigned short))) {
 	return EFAULT;
 }
@@ -50,15 +53,38 @@ pid_t* children_ptr = response_copy_ptr->children;
 
 //get siblings and children
 task_struct* current = get_current();
-task_struct* young_sibling = current->*p_cptr;
-task_struct* old_sibling = current->*p_osptr;
-task_struct* child = current->*p_pptr;???
+task_struct* young_sibling = current->p_cptr;
+task_struct* old_sibling = current->p_osptr;
+task_struct* child = current->p_pptr;
+
+task_struct* pos;
+
 
 //list children
+list_for_each_entry (pos, &(child), child) {
+	*children_ptr++ = pos->pid;
+	printk(KERN_INFO "Child %d found.\n", pos->pid);
+}
 
 //list siblings
+list_for_each_entry(pos, &(young_sibling), young_sibling) {
+	siblings_ptr++ = pos->pid;
+	printk(KERN_INFO "Sibling %d found.\n", pos->pid);
+}
 
-//some check to see if we are init, so dont look for parents?
+list_for_each_entry(pos, &(old_sibling), old_sibling) {
+	siblings_ptr++ = pos->pid;
+	printk(KERN_INFO "Sibling %d found.\n", pos->pid);
+}
+
+ancestor_search(current->p_opptr, ancestor_ptr);
+
+if(copy_to_user(response, respone_copy_ptr, sizeof(ancestry))){
+	return EFAULT;
+}
+
+
+return 0;
 
 }
 
