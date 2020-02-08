@@ -50,8 +50,9 @@ pid_t* children_ptr = response_copy_ptr->children;
 
 //get siblings and children
 task_struct* current = get_current();
-//struct list_head siblings = current->parent->children;???
-//struct list_head children = current->children;???
+task_struct* young_sibling = current->*p_cptr;
+task_struct* old_sibling = current->*p_osptr;
+task_struct* child = current->*p_pptr;???
 
 //list children
 
