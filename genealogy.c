@@ -21,15 +21,14 @@ pid_t children[100];
 
 
 void ancestor_search(struct task_struct* parent_ptr, pid_t* ancestor_ptr) {
-  pid_t tmp_pid = parent_ptr->pid;
-  *ancestor_ptr++ = parent_ptr->pid;
-  printk(KERN_INFO "Parent: %d\n", parent_ptr->pid);
-  ancestor_search(parent_ptr->p_pptr, ancestor_ptr);
-  if(parent_ptr == 0)
+  if(parent_ptr->pid == 0 || parent_ptr->pid == 0)
   {
     printk(KERN_INFO "Parent FOUNDDDD!: %d\n", parent_ptr->pid);
     return;
   }
+  *ancestor_ptr++ = parent_ptr->pid;
+  printk(KERN_INFO "Parent: %d\n", parent_ptr->pid);
+  ancestor_search(parent_ptr->parent, ancestor_ptr);
 }
 
 asmlinkage long new_sys_cs3013_syscall2(unsigned short *target_pid, struct ancestry *response) {
@@ -45,7 +44,7 @@ asmlinkage long new_sys_cs3013_syscall2(unsigned short *target_pid, struct ances
 		return EFAULT;
 	}
 
-	if(copy_from_user(response_copy_ptr, response, sizeof(ancestry))){
+	if(copy_from_user(response_copy_ptr, response, sizeof(struct ancestry))){
 		return EFAULT;
 	}
 
@@ -57,10 +56,9 @@ asmlinkage long new_sys_cs3013_syscall2(unsigned short *target_pid, struct ances
 
 	//get siblings and children
 	//switch to correct process here!!! but how???? cuz idk
-	struct task_struct* current = get_current();
-	struct task_struct* young_sibling = current->p_cptr;
-	struct task_struct* old_sibling = current->p_osptr;
-	struct task_struct* child = current->p_pptr;
+	// struct task_struct* current = current;
+	struct task_struct* siblings = current->sibling;
+	struct task_struct* child = current->children;
 
 	struct task_struct* pos;
 
@@ -75,12 +73,7 @@ asmlinkage long new_sys_cs3013_syscall2(unsigned short *target_pid, struct ances
 
 	//needs check to see if "silbling" is itself(the original child one)
 
-	list_for_each_entry(pos, &(young_sibling), young_sibling) {
-		siblings_ptr++ = pos->pid;
-		printk(KERN_INFO "Sibling %d found.\n", pos->pid);
-	}
-
-	list_for_each_entry(pos, &(old_sibling), old_sibling) {
+	list_for_each_entry(pos, &(siblings), siblings) {
 		siblings_ptr++ = pos->pid;
 		printk(KERN_INFO "Sibling %d found.\n", pos->pid);
 	}
@@ -90,7 +83,7 @@ asmlinkage long new_sys_cs3013_syscall2(unsigned short *target_pid, struct ances
 	}
 
 
-	if(copy_to_user(response, respone_copy_ptr, sizeof(ancestry))){
+	if(copy_to_user(response, respone_copy_ptr, sizeof(struct ancestry))){
 		return EFAULT;
 	}
 
