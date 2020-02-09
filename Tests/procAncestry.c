@@ -29,15 +29,18 @@ long testCall3 ( void) {
 	return (long) syscall(__NR_cs3013_syscall3);
 }
 
-int main () {
+int main (int argc, char *argv[]) {
 	printf("The return values of the system calls are:\n");
-	printf("\tcs3013_syscall1: %ld\n", testCall1());
 
 	struct ancestry *myAncestry = malloc(sizeof(struct ancestry));
-	unsigned short *pid = malloc(sizeof(unsigned short));
-	printf("\tcs3013_syscall2: %ld\n", testCall2(pid, myAncestry));
-
-
-	printf("\tcs3013_syscall3: %ld\n", testCall3());
+	if(argc < 2)
+	{
+		printf("Not enough arguments! Exiting...\n");
+		return 0;
+	}
+	unsigned short pid = atoi(argv[1]);
+	unsigned short* pid_ptr = &pid;
+	// unsigned short *pid = malloc(sizeof(unsigned short));
+	printf("\tcs3013_syscall2: %ld\n", testCall2(pid_ptr, myAncestry));
 	return 0;
 }
