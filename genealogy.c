@@ -24,7 +24,7 @@ void ancestor_search(struct task_struct* parent_ptr, pid_t* ancestor_ptr) {
     return;
   }
   ancestor_search(parent_ptr->parent, ancestor_ptr);
-  printk(KERN_INFO "Parent found: %d\n", parent_ptr->pid);
+  printk(KERN_INFO "Ancestor found: %d\n", parent_ptr->pid);
 }
 
 asmlinkage long new_sys_cs3013_syscall2(unsigned short *target_pid, struct ancestry *response) {
@@ -68,7 +68,7 @@ asmlinkage long new_sys_cs3013_syscall2(unsigned short *target_pid, struct ances
 	//list siblings
 	list_for_each_entry(pos, &me->sibling, sibling) {
 		if(pos->pid == 0) {
-			
+
 		}
 		else {
 			*siblings_ptr++ = pos->pid;
