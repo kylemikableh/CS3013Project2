@@ -21,13 +21,12 @@ pid_t children[100];
 
 
 void ancestor_search(struct task_struct* parent_ptr, pid_t* ancestor_ptr) {
-  if(parent_ptr->pid == 0 || parent_ptr->pid == 0)
+  if(parent_ptr->pid == 0 || parent_ptr->pid == 1)
   {
-    printk(KERN_INFO "Parent FOUNDDDD!: %d\n", parent_ptr->pid);
     return;
   }
   *ancestor_ptr++ = parent_ptr->pid;
-  printk(KERN_INFO "Parent: %d\n", parent_ptr->pid);
+  printk(KERN_INFO "Parent FOUNDDDD!: %d\n", parent_ptr->pid);
   ancestor_search(parent_ptr->parent, ancestor_ptr);
 }
 
@@ -56,15 +55,15 @@ asmlinkage long new_sys_cs3013_syscall2(unsigned short *target_pid, struct ances
 
 	//get siblings and children
 	//switch to correct process here!!! but how???? cuz idk
-	// struct task_struct* current = current;
-	struct task_struct* siblings = current->sibling;
-	struct task_struct* child = current->children;
+	struct task_struct* me = current;
+	struct task_struct* siblings = me->sibling;
+	struct task_struct* child = me->children;
 
 	struct task_struct* pos;
 
 
 	//list children
-	list_for_each_entry (pos, &(child), child) {
+	list_for_each_entry (pos, &me->children, sibling) {
 		*children_ptr++ = pos->pid;
 		printk(KERN_INFO "Child %d found.\n", pos->pid);
 	}
@@ -73,17 +72,17 @@ asmlinkage long new_sys_cs3013_syscall2(unsigned short *target_pid, struct ances
 
 	//needs check to see if "silbling" is itself(the original child one)
 
-	list_for_each_entry(pos, &(siblings), siblings) {
+	list_for_each_entry(pos, &me->sibling, sibling) {
 		siblings_ptr++ = pos->pid;
 		printk(KERN_INFO "Sibling %d found.\n", pos->pid);
 	}
 
-	if (current->pid != 1) {
-		ancestor_search(current->p_opptr, ancestor_ptr);
+	if (me->pid != 1) {
+		ancestor_search(me->parent, ancestor_ptr);
 	}
 
 
-	if(copy_to_user(response, respone_copy_ptr, sizeof(struct ancestry))){
+	if(copy_to_user(response, response_copy_ptr, sizeof(struct ancestry))){
 		return EFAULT;
 	}
 
